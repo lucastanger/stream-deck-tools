@@ -1,0 +1,62 @@
+{
+  "$schema": "https://schemas.elgato.com/streamdeck/plugins/manifest.json",
+  "UUID": "com.local.teamsmic",
+  "Name": "Teams Mic",
+  "Version": "0.3.0.0",
+  "Author": "Local Tools",
+  "Description": "Microsoft Teams microphone, camera, and configurable meeting reactions through macOS Accessibility.",
+  "Icon": "images/plugin",
+  "Category": "Teams Mic",
+  "CategoryIcon": "images/category",
+  "CodePath": "bin/plugin.cjs",
+  "SDKVersion": 2,
+  "Software": { "MinimumVersion": "6.6" },
+  "OS": [{ "Platform": "mac", "MinimumVersion": "12" }],
+  "Nodejs": { "Version": "20" },
+  "Actions": [{
+    "UUID": "com.local.teamsmic.toggle",
+    "Name": "Teams Microphone",
+    "Tooltip": "Toggle Teams microphone; follows the actual Teams mute state.",
+    "Icon": "images/action",
+    "PropertyInspectorPath": "ui/index.html",
+    "Controllers": ["Keypad"],
+    "SupportedInMultiActions": false,
+    "DisableAutomaticStates": true,
+    "States": [
+      { "Image": "images/mic-unknown", "Title": "Unknown", "TitleAlignment": "bottom", "FontSize": 12 },
+      { "Image": "images/mic-muted", "Title": "Muted", "TitleAlignment": "bottom", "FontSize": 12 },
+      { "Image": "images/mic-live", "Title": "LIVE", "TitleAlignment": "bottom", "FontSize": 12 },
+      { "Image": "images/mic-blocked", "Title": "Blocked", "TitleAlignment": "bottom", "FontSize": 12 }
+    ]
+  }, {
+    "UUID": "com.local.teamsmic.camera",
+    "Name": "Teams Camera",
+    "Tooltip": "Toggle Teams camera; follows the actual Teams camera state.",
+    "Icon": "images/camera-action",
+    "PropertyInspectorPath": "ui/index.html",
+    "Controllers": ["Keypad"],
+    "SupportedInMultiActions": false,
+    "DisableAutomaticStates": true,
+    "States": [
+      { "Image": "images/camera-unknown", "Title": "Unknown", "TitleAlignment": "bottom", "FontSize": 12 },
+      { "Image": "images/camera-off", "Title": "Off", "TitleAlignment": "bottom", "FontSize": 12 },
+      { "Image": "images/camera-on", "Title": "ON", "TitleAlignment": "bottom", "FontSize": 12 },
+      { "Image": "images/camera-blocked", "Title": "Blocked", "TitleAlignment": "bottom", "FontSize": 12 }
+    ]
+  }, {
+    "UUID": "com.local.teamsmic.reaction",
+    "Name": "Teams Reaction",
+    "Tooltip": "Press a configured meeting reaction once: Like, Love, Applause, Laugh, or Surprised.",
+    "Icon": "images/reaction-action",
+    "PropertyInspectorPath": "ui/index.html",
+    "Controllers": ["Keypad"],
+    "SupportedInMultiActions": false,
+    "DisableAutomaticStates": true,
+    "States": [
+      { "Image": "images/reaction-unknown", "Title": "Unknown", "TitleAlignment": "bottom", "FontSize": 10 },
+      { "Image": "images/reaction-ready", "Title": "Like", "TitleAlignment": "bottom", "FontSize": 10 },
+      { "Image": "images/reaction-ready", "Title": "Like", "TitleAlignment": "bottom", "FontSize": 10 },
+      { "Image": "images/reaction-blocked", "Title": "Blocked", "TitleAlignment": "bottom", "FontSize": 10 }
+    ]
+  }]
+}

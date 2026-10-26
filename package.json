@@ -1,0 +1,21 @@
+{
+  "name": "teams-mic-streamdeck",
+  "version": "0.3.0",
+  "private": true,
+  "description": "State-aware Teams microphone, camera, and meeting reactions for Stream Deck on macOS.",
+  "license": "MIT",
+  "engines": { "node": ">=22" },
+  "keywords": ["stream-deck", "microsoft-teams", "macos", "accessibility"],
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test test/*.test.mjs",
+    "test:model": "node --test test/model.test.mjs",
+    "validate": "streamdeck validate com.local.teamsmic.sdPlugin --no-update-check",
+    "check": "npm run build && npm test && npm run validate",
+    "pack": "node scripts/package.mjs",
+    "package": "npm run check && npm run pack"
+  },
+  "dependencies": { "ws": "^8.18.3" },
+  "devDependencies": { "@elgato/cli": "^1.10.3", "esbuild": "^0.25.0" }
+}

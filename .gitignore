@@ -1,0 +1,30 @@
+# Dependencies and generated output
+node_modules/
+.build/
+dist/
+com.local.teamsmic.sdPlugin/
+coverage/
+*.streamDeckPlugin
+*.zip
+
+# macOS metadata and local diagnostics
+.DS_Store
+._*
+*.log
+*.log.*
+*.jsonl
+
+# Local credentials, signing material, and environment settings
+.env
+.env.*
+!.env.example
+.npmrc
+*.pem
+*.key
+*.p12
+*.pfx
+*.mobileprovision
+
+# Local editor state
+.idea/
+.vscode/

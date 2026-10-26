@@ -1,0 +1,27 @@
+name: Bug report
+description: Report a reproducible issue without private meeting data.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not post meeting screenshots, participant names, meeting links, tokens,
+        or unredacted logs. See SECURITY.md for vulnerability reporting.
+  - type: textarea
+    id: versions
+    attributes:
+      label: Versions
+      description: Plugin, macOS, Teams, Stream Deck, and Mac architecture.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction in a private test call
+      description: Include the action involved, expected/actual behaviour, and whether Teams was in the background or minimised.
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Redacted diagnostics (optional)
+      description: Control states/errors only; remove personal and meeting information.

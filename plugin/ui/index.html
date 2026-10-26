@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Teams Controls</title>
+<style>
+:root{color-scheme:dark;font:13px system-ui,sans-serif}body{margin:16px;background:#2d2d2d;color:#eee}h1{font-size:17px}h2{font-size:14px;margin-top:22px}p,li{line-height:1.5}ol{padding-left:20px}button{background:#484848;color:white;border:1px solid #777;border-radius:5px;padding:8px 12px;margin:4px 4px 4px 0;cursor:pointer}button:hover{background:#555}.status{padding:12px;border:1px solid #777;border-radius:6px}#state{font-weight:700}#detail{color:#ccc;overflow-wrap:anywhere}.note{color:#ccc;font-size:12px}code{overflow-wrap:anywhere}
+</style>
+</head>
+<body>
+<h1 id="heading">Teams Controls</h1>
+<div class="status" aria-live="polite"><span id="state">Connecting…</span><div id="detail"></div></div>
+<p id="description">Updates follow Teams' actual control, including changes made inside Teams.</p>
+<p><strong id="legend">Grey: unknown · Amber: blocked</strong></p>
+<section id="reaction-settings" hidden>
+<label for="reaction">Reaction for this key</label>
+<select id="reaction" style="display:block;margin:8px 0;padding:8px;max-width:100%">
+<option value="" disabled>Choose a reaction</option>
+<option value="like">👍 Like</option><option value="love">❤️ Love</option>
+<option value="applause">👏 Applause</option><option value="laugh">😆 Laugh</option>
+<option value="surprised">😮 Surprised</option>
+</select>
+<p class="note">Changing this choice only saves the key's setting. Press the physical key to react. Add multiple keys for different reactions.</p>
+<p class="note">This opens Teams' meeting picker and presses the selected control once. A check mark confirms the press, not delivery to other participants. No automatic retries. Failure may leave the picker open.</p>
+</section>
+<h2>Accessibility setup</h2>
+<ol>
+<li>Click <strong>Request permission</strong>. macOS may list <strong>Stream Deck</strong>, <strong>Teams Mic Helper</strong>, or the responsible launching app.</li>
+<li>Open Accessibility settings and enable the app macOS identifies. You can use <strong>Show helper</strong> to locate the bundled helper if it must be added manually using the + button.</li>
+<li>Join a Teams call. Click <strong>Refresh status</strong>.</li>
+</ol>
+<button data-command="permission">Request permission</button>
+<button data-command="privacy">Accessibility settings</button>
+<button data-command="reveal">Show helper</button>
+<button data-command="refresh">Refresh status</button>
+<h2>Limitations</h2>
+<p class="note">Prototype for English-language Teams on macOS. It uses Accessibility, not Microsoft's local API. Teams must expose exactly one matching control for this action. Microphone background operation was tested; minimised windows and future Teams updates may make controls unavailable.</p>
+<p class="note">No control found does not prove your microphone or camera is off, or that you are out of a call. Unknown is never treated as off. Accessibility cannot atomically set state: avoid changing the same control elsewhere at exactly the same moment as pressing this key. Pressing the camera key while off will turn it on. Do not use this as a privacy guarantee.</p>
+<script>
+let socket, context, action;
+const state = document.getElementById('state');
+const detail = document.getElementById('detail');
+function send(command, extra = {}) {
+ if (socket?.readyState === WebSocket.OPEN) socket.send(JSON.stringify({event:'sendToPlugin',action,context,payload:{command,...extra}}));
+}
+window.connectElgatoStreamDeckSocket = (port, uuid, registerEvent, info, actionInfo) => {
+ const config = JSON.parse(actionInfo);
+ context = config.context;
+ action = config.action;
+ const camera = action === 'com.local.teamsmic.camera';
+ const reaction = action === 'com.local.teamsmic.reaction';
+ document.getElementById('heading').textContent = reaction ? 'Teams Reaction' : camera ? 'Teams Camera' : 'Teams Microphone';
+ document.getElementById('reaction-settings').hidden = !reaction;
+ document.getElementById('description').textContent = reaction
+  ? "Press the key to send your configured meeting reaction. Reactions are momentary actions, not persistent on/off states."
+  : camera ? "Press the key to toggle Teams' camera. Turning it on may make you visible to the call. Changes inside Teams update this key too."
+  : "Press the key to toggle Teams' microphone. Changes inside Teams update this key too.";
+ document.getElementById('legend').textContent = reaction
+  ? 'Blue: picker available · Grey: unknown · Amber: blocked'
+  : camera ? 'Red: off · Green: ON · Grey: unknown · Amber: blocked'
+  : 'Red: muted · Green: LIVE · Grey: unknown · Amber: blocked';
+ socket = new WebSocket('ws://127.0.0.1:' + port);
+ socket.onopen = () => { socket.send(JSON.stringify({event:registerEvent,uuid})); send('inspect'); };
+ socket.onmessage = ({data}) => {
+  let event; try { event = JSON.parse(data); } catch { return; }
+  if (event.event !== 'sendToPropertyInspector') return;
+  const value = event.payload;
+  state.textContent = value.display || 'Unknown';
+  detail.textContent = [value.reason,value.error].filter(Boolean).join(' — ');
+  if (reaction) document.getElementById('reaction').value = value.reaction || '';
+ };
+ socket.onclose = () => {state.textContent='Disconnected';detail.textContent='Stream Deck connection closed.'};
+};
+document.querySelectorAll('[data-command]').forEach(button => button.addEventListener('click', () => send(button.dataset.command)));
+document.getElementById('reaction').addEventListener('change', event => send('configure', {reaction:event.target.value}));
+</script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    runs-on: macos-15
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      # Pure native self-tests and mocked host tests: no real meeting or AX access.
+      - run: npm run package
+      - uses: actions/upload-artifact@v4
+        with:
+          name: teams-controls-${{ github.sha }}
+          path: |
+            dist/*.streamDeckPlugin
+            dist/*.sha256
+          if-no-files-found: error
+          retention-days: 14
