@@ -17,5 +17,5 @@
     "package": "npm run check && npm run pack"
   },
   "dependencies": { "ws": "^8.18.3" },
-  "devDependencies": { "@elgato/cli": "^1.10.3", "esbuild": "^0.25.0" }
+  "devDependencies": { "@elgato/cli": "^1.10.3", "esbuild": "^0.28.2" }
 }
