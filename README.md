@@ -1,5 +1,15 @@
 # Teams Controls for Stream Deck · macOS
 
+**Your Teams meeting controls, one key away.**
+
+<p align="center">
+  <img src="docs/images/stream-deck-controls.png" width="600" alt="Actual Stream Deck Neo editor showing the microphone, camera, and reaction keys in their Unknown state">
+</p>
+
+*Actual Stream Deck capture: microphone, camera, and reactions. No meeting controls
+were accessible at capture time, so the keys correctly show **Unknown** and block
+presses. These are real screenshots, not staged live-state indicators.*
+
 An unofficial Stream Deck plugin for **Microsoft Teams microphone, camera, and
 meeting reactions**, using the actual macOS Accessibility controls instead of
 keyboard shortcuts or Microsoft's local third-party API.
@@ -87,6 +97,11 @@ microphone. A missing control does not prove you are muted or outside a call.
 Select a **Teams Reaction** key and choose its reaction in the setup panel.
 Default: **Like**. Duplicate the action onto several keys for different reactions.
 Changing this choice, opening setup, and refreshing status never send a reaction.
+
+![Actual Stream Deck reaction settings dropdown with Like, Love, Applause, Laugh, and Surprised choices](docs/images/reaction-settings.png)
+
+*Five reactions, saved independently for each key. This is the Stream Deck setup
+panel—not a reaction being sent to a meeting.*
 
 Pressing the physical key opens the exact meeting **React** control and presses
 one enabled reaction from a toolbar containing all five exact labels, once each,
