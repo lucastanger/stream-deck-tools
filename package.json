@@ -16,6 +16,6 @@
     "pack": "node scripts/package.mjs",
     "package": "npm run check && npm run pack"
   },
-  "dependencies": { "ws": "^8.18.3" },
+  "dependencies": { "ws": "^8.22.1" },
   "devDependencies": { "@elgato/cli": "^1.10.3", "esbuild": "^0.25.0" }
 }
